@@ -23,7 +23,7 @@ Le site propose un systeme de login/register afin de sauvegarder nos voyages.
 </ul>
 <br>
 <h2>Tables</h2>
-A venir
+<img src="frontend/IMG/tables.png">
 <br>
 <h2>Webservices</h2>
 <br>
