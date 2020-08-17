@@ -26,3 +26,9 @@ INSERT INTO tbPays values
 (25,'Bulgarie',),
 (26,'Roumanie',),
 (27,'Croatie',);
+
+
+INSERT INTO tbUsers values
+(default,'Jon', 'key'),
+(default,'user', 'pass'),
+(default,'user2', 'pass');
