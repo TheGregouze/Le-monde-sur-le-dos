@@ -141,3 +141,27 @@ function displayErreure(erreure){
 		erreureDiv.innerHTML = "Erreure : " + erreure;
 	}
 }
+
+
+	function recupererCarnet(){//va chercher le contenu d'un carnet associé a l'id de l'utilisateur connecté
+	let xhr = new XMLHttpRequest();
+	let url = 'recupererCarnet?userID=' + userID;
+
+	xhr.open("get", url, true);
+	xhr.onload = construireTableCarnet;
+	xhr.send();
+}
+
+
+function construireTableCarnet(){//construire la table des pays et de leurs notes dans le carnet associé a l'ID de l'utilisateur, et l'affiche sur la page dynamiquement
+	//console.log(this.responseText);
+	carnetList = JSON.parse(this.responseText);
+	let tableCarnet = "";
+	//console.log(carnetList);
+	for(let i in carnetList){
+		tableCarnet += "<tr><td>" + carnetList[i].libPays + "</td><td>" + carnetList[i].notes + "</td><td>";
+	}//construction du corps de la table
+
+	document.getElementById('carnet').innerHTML = "<tr><thead><strong>Votre carnet :</strong></thead></tr><tr><th>Pays</th><th>Notes</th><th></th></tr>"
+	document.getElementById('carnet').innerHTML += tableCarnet;
+}
