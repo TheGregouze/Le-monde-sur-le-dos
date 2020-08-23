@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>LE MONDE SUR LE DOS</title>
-		<script type="text/javascript" src="js/scripts.js"></script>
+		<script type="text/javascript" src="JS/scripts.js"></script>
 	
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
@@ -24,16 +24,25 @@
 			</form>
 		</div>
 		
+		
 		<div id="main">
-			Bienvenue sur le site.
-		</div>
+			<form id="formPays" onsubmit="return false;">
+				<label for="pays">Selectionnez</label>
+				<select id="pays" name="pays">
+					<!-- ici vont être dynamiquement ajouté a partir de la DBA la liste des pays -->
+				</select>
+				<input type="textarea" name="note" id="note" placeholder='NOOOTEEUUUU'>
+				<input type="submit" name="submit" id="paysSubmit" value="Valider" onclick=ajouterPays()>
+			</form>
+		<br>
+	
+			<div>
+				<table id=carnet>
+				</table>
+			</div>
 		
-		<div>
-			<table id=carnet>
-			</table>
-		</div>
 		
-		<div id='erreure'>
+			<div id='erreure'>
 		</div>
 	</body>
 </html>
