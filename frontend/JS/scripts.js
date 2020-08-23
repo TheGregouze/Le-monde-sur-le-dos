@@ -165,3 +165,44 @@ function construireTableCarnet(){//construire la table des pays et de leurs note
 	document.getElementById('carnet').innerHTML = "<tr><thead><strong>Votre carnet :</strong></thead></tr><tr><th>Pays</th><th>Notes</th><th></th></tr>"
 	document.getElementById('carnet').innerHTML += tableCarnet;
 }
+
+//recuperer la liste des pays sur le serveur
+function getPays(){
+	let xhr = new XMLHttpRequest(); // instancier XMLHttpRequest
+
+	xhr.open('get', "getPays", true); // préparer
+	xhr.onload = // callback : fonction anonyme
+			function(){ paysList = JSON.parse(xhr.responseText);
+			faireSelect();		 
+	}
+	xhr.send(); // envoyer
+}
+
+function trierListe(attribut) {//permet de trier une liste donnée en format JSON selon un certain attribut
+    return function(a, b) {    //algorithme pour le sort qui se trouve dans le makeselect
+        if (a[attribut] > b[attribut]) {    
+            return 1;    
+        } else if (a[attribut] < b[attribut]) {    
+            return -1;
+        }    
+        return 0;    
+    }    
+}   
+
+function faireSelect(){ // faire une liste déroulante alphabétiquement triée des produits
+	let liste;
+	paysList.sort(trierListe('libPays'));
+	for(let i in paysList){
+		liste += '<option value=' + paysList[i].idPays + '>' + paysList[i].libPays + '</option>';
+	}
+
+	document.getElementById("pays").innerHTML = liste;
+}
+
+function ajouterPays(x){
+		let xhr = new XMLHttpRequest(); // instancier XMLHttpRequest
+		let url = 'ajouterPays?userId=' + userID + '&idPays=' + document.getElementById("pays").value + '&notes='+ document.getElementById("note").value  ;
+	xhr.open('get', url, true); 
+	xhr.onload = // callback : fonction anonyme	
+	xhr.send(); // envoyer
+}
