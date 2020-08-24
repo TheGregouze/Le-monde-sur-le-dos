@@ -11,7 +11,7 @@ Ce site recense tout les pays que vous avez visités et vous permet de prendre d
 <ol>
 <li>Avoir une liste des pays déjà visité.</li>
 <li>Avoir des notes sur les pays.</li>
-<li>Avoir un badge avec le drapeau du pays qui s'affiche à chaque pays visité</li>
+<li>Avoir un tableau avec le drapeau du pays qui s'affiche à chaque pays visité</li>
 </ol>
 <h2>Fonctionnalités secondaires:</h2>
 <br>
