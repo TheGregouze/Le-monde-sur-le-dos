@@ -3,46 +3,61 @@
 	<head>
 		<meta charset="utf-8">
 		<title>LE MONDE SUR LE DOS</title>
-		<script type="text/javascript" src="JS/scripts.js"></script>
 	
+		<script type="text/javascript" src="JS/scripts.js"></script>
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 	</head>
 	<body>
-		<div id="loginDiv">
-			<form id="userID" onsubmit="return false;">
-				<fieldset>
-					<legend><button id=loginRegister>Login / Register</button></legend>
+		<section>
+			<div id="loginDiv">
+				<form id="userID" onsubmit="return false;">
+					<fieldset>
+						<legend><button id=loginRegister>Login / Register</button></legend>
 	
-					<label for="username">Username</label>
-					<input type="text" name="username" required>
-
-					<label for="pswd">Mot de passe</label>
-					<input type="password" name="pswd" required>
+						<label for="username">Username</label>
+						<input type="text" name="username" required>
+	
+						<label for="pswd">Mot de passe</label>
+						<input type="password" name="pswd" required>
 	
 						<input type="submit" name="sub" value="Login" id="userIDSubmit"> 
-				</fieldset>
-			</form>
-		</div>
-		
-		
-		<div id="main">
-			<form id="formPays" onsubmit="return false;">
-				<label for="pays">Selectionnez</label>
-				<select id="pays" name="pays">
-					<!-- ici vont être dynamiquement ajouté a partir de la DBA la liste des pays -->
-				</select>
-				<input type="textarea" name="note" id="note" placeholder='NOOOTEEUUUU'>
-				<input type="submit" name="submit" id="paysSubmit" value="Valider" onclick=ajouterPays()>
-			</form>
-		<br>
-	
-			<div>
-				<table id=carnet>
-				</table>
+					</fieldset>
+				</form>
 			</div>
 		
 		
-			<div id='erreure'>
-		</div>
+			<div id="main">
+				<form id="formPays" onsubmit="return false;">
+					<label for="pays">Selectionnez</label>
+					<select id="pays" name="pays">
+					<!-- ici vont être dynamiquement ajouté a partir de la DBA la liste des pays -->
+					</select>
+					<input type="textarea" name="note" id="note" placeholder='Petites infos sur le voyage.'>
+					<input type="submit" name="submit" id="paysSubmit" value="Valider" onclick=ajouterPays() >
+				</form>
+				<br>
+	
+				<div>
+					<table id=carnet>
+					</table>
+					<button id=reset onclick=resetCarnet()>Reset</button>
+				</div>
+				
+				<div>
+				<form>
+				<input type=textarea name=erreure id=erreure>
+				</form>
+				</div>
+	
+			</div>
+			
+			<div>
+				<table id=flag>
+				</table>
+			</div>
+			<div id="lien">
+				<a href=https://github.com/TheGregouze/Le-monde-sur-le-dos>Clique ici pour aller sur le site.</a>
+			</div>
+		</section
 	</body>
 </html>
