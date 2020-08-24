@@ -129,6 +129,7 @@ function displayFormProd(){
 	document.getElementById("main").style.display = "inline-block";
 	document.getElementById("formPays").style.display = "inline-block";
 	document.getElementById("userID").style.display = "none";
+	document.getElementById("drapeautable").style.display = "inline-block";
 }
 
 
@@ -137,14 +138,22 @@ function displayFormProd(){
 //MESSAGE ERREUR.																																									//
 //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
-	//permet l'affichage des messages d'erreures ainsi que le effacement
+/**
+ *Cette fonction sert à afficher le messages en cas d'erreur et à effacer ce même
+ *message une fois le problème résolu. Elle utilise des conditions afin de constater
+ *le moment ou le problème n'est plus.
+ *
+ *@param(erreure) est une string.
+ *@return() il n'y en a pas.
+**/
 function displayErreure(erreure){
 	let erreureDiv = document.getElementById('erreure');
 	if (erreure == 'ok'){
 		erreureDiv.style.display = 'none';
 	}else{
+		console.log('erreur');
 		erreureDiv.style.display = 'inline-block';
-		erreureDiv.innerHTML = "Erreure : " + erreure;
+		erreureDiv.innerHTML = "Erreur : " + erreure;
 	}
 }
 	
@@ -180,7 +189,7 @@ function construireTableCarnet(){
 	document.getElementById('flag').innerHTML = "";
 	tableDrapeau=['<tr>'];
 	for(let i in carnetList){
-		if(tableDrapeau.length  %6 == 0){
+		if(tableDrapeau.length  %11 == 0){
 			tableDrapeau.push('</tr><tr>');
 			tableDrapeau.push('<td><img src=IMG/flags/' + carnetList[i].drapeaux + ".jpg></td>")
 		}
@@ -209,7 +218,13 @@ function getPays(){
 	xhr.send(); // envoyer
 }
 
-	//permet de trier une liste donnée en format JSON selon un certain attribut.
+	/**
+ *Cette fonction sert à trier un array de string par ordre alphabétique
+ *en utilisant une seconde fonction au sein de celle-ci.
+ *
+ *@param(attribut) est un array de string.
+ *@return(function(a, b))qui s'occuppe de comparer et trier l'array attribut pour le renvoyer une fois classé.
+**/
 function trierListe(attribut) {
     return function(a, b) {//algorithme pour le sort qui se trouve dans le makeselect
         if (a[attribut] > b[attribut]) {    
