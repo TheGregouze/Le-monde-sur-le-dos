@@ -2,14 +2,17 @@
 
 //VARIABLES GLOBALES
 
-let userID; //sert a verifier si l'utilisateur est connecté, et permet de lister les pays dans le "carnet" correct
-let userList; //stocke de manière globale les ID, pseudos et mots de passes des users
+let userID; //sert a verifier si l'utilisateur est connecté, et permet de lister les pays dans le "carnet" correct.
+let userList; //stocke de manière globale les ID, pseudos et mots de passes des users.
+let carnetList;//liste des pays et leurs notes dans le carnet.
+let paysList; //liste des pays.
+let tableDrapeau = [];
 
-/* **Systeme de register** */
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//PARTIE LOGIN ET REGISTER.																																							//
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
-
-
-	//permet d'avoir une distinction entre une tentative de création de compte et d'une connexion a un compte
+	//permet d'avoir une distinction entre une tentative de création de compte et une connexion a un compte.
 function changeLogin(){
 	let sub = document.getElementById('userIDSubmit');
 	if (sub.value == "Login"){
@@ -19,6 +22,7 @@ function changeLogin(){
 	}
 }
 
+	//gestion du login
 function userLogin(name, password){
 	if (userExiste(name)){
 		let uIndex;
@@ -27,8 +31,7 @@ function userLogin(name, password){
 				uIndex = i;
 			}
 		}
-		if(userList[uIndex].pswd == password){//test si le mot de passe est valide	
-			//console.log("Connection!");
+		if(userList[uIndex].pswd == password){//test si le mot de passe est valide
 			getUserID(name);
 			displayErreure('ok');
 		}else{
@@ -39,6 +42,7 @@ function userLogin(name, password){
 	}
 }
 
+	//fait appel a la procedure du meme nom et sert a charger le carnet lié au bon userId.
 function getUserID(name){
 	let xhr = new XMLHttpRequest();
 	let url = 'getUserID?username=' + name;
@@ -47,15 +51,14 @@ function getUserID(name){
 			userID = xhr.responseText; 
 			//console.log("votre id est = " + xhr.responseText); 
 			displayFormProd();
-			//ICI SE TROUVE L AFFICHAGE CARNET
+			recupererCarnet();
 			};
 	xhr.send();
 }
 
-	//dirige les infos vers la fonction adéquate
+	//dirige les infos vers la fonction adéquate;
 function userSubHandler(){
 	let form = document.getElementById("userID");
-
 	if(form.username.value && form.pswd.value){//si les deux champs ne sont pas remplis, rien ne se passe du coté JS, la page affiche que les champs sont requis
 		userListRequest()	
 		if (form.sub.value == "Login"){
@@ -68,8 +71,8 @@ function userSubHandler(){
 	}
 }
 
-
-function userListRequest(){ //recuperation de la liste des IDS , psuedos et mot de passes
+	//recuperation de la liste des IDS , pseudos et mots de passe.
+function userListRequest(){
 	let xhr = new XMLHttpRequest();
 	xhr.open('get','listUsers',true);
 	xhr.onload = function(){
@@ -79,9 +82,8 @@ function userListRequest(){ //recuperation de la liste des IDS , psuedos et mot 
 	xhr.send();
 }
 
-
-function userExiste(name){//retourne faux si l'utilisateur n'existe pas, vrai sinon
-
+	//retourne faux si l'utilisateur n'existe pas, vrai sinon.
+function userExiste(name){
 	for(let i in userList){
 		//console.log(userList[i].username);
 		if(userList[i].username == name){
@@ -91,7 +93,7 @@ function userExiste(name){//retourne faux si l'utilisateur n'existe pas, vrai si
 	return false;
 }
 
-
+	//gestion du register.
 function userRegister(name, password){
 	if (!userExiste(name)){//si le nom est libre
 		let xhr = new XMLHttpRequest();
@@ -110,8 +112,7 @@ function userRegister(name, password){
 	}	
 }
 
-
-	//s'occupe de lancer les eventListeners et fonctions a lancer lors du chargerment
+	//s'occupe de lancer les eventListeners et fonctions a lancer lors du chargerment.
 window.onload = function(){
 	let loginChange = document.getElementById("loginRegister");
 	let userSub = document.getElementById("userIDSubmit");
@@ -120,16 +121,21 @@ window.onload = function(){
 	userSub.addEventListener('click', userSubHandler);
 	
 	userListRequest();
+	getPays();
 }
 
-	
-	//masque la selection des pays avant connexion, et le formulaire du login après connexion
+	//masque la selection des pays avant connexion, et le formulaire du login après connexion.
 function displayFormProd(){
 	document.getElementById("main").style.display = "inline-block";
+	document.getElementById("formPays").style.display = "inline-block";
 	document.getElementById("userID").style.display = "none";
 }
 
 
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//MESSAGE ERREUR.																																									//
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 
 	//permet l'affichage des messages d'erreures ainsi que le effacement
 function displayErreure(erreure){
@@ -141,32 +147,57 @@ function displayErreure(erreure){
 		erreureDiv.innerHTML = "Erreure : " + erreure;
 	}
 }
-
-
-	function recupererCarnet(){//va chercher le contenu d'un carnet associé a l'id de l'utilisateur connecté
+	
+	
+	
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+//GESTION DU CARNET.
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+	
+	//va chercher le contenu d'un carnet associé a l'id de l'utilisateur connecté
+function recupererCarnet(){
 	let xhr = new XMLHttpRequest();
 	let url = 'recupererCarnet?userID=' + userID;
-
+	
 	xhr.open("get", url, true);
 	xhr.onload = construireTableCarnet;
 	xhr.send();
 }
 
-
-function construireTableCarnet(){//construire la table des pays et de leurs notes dans le carnet associé a l'ID de l'utilisateur, et l'affiche sur la page dynamiquement
+	//construit la table des pays et de leurs notes dans le carnet associé a l'ID de l'utilisateur, et l'affiche sur la page dynamiquement.
+function construireTableCarnet(){
 	//console.log(this.responseText);
 	carnetList = JSON.parse(this.responseText);
 	let tableCarnet = "";
-	//console.log(carnetList);
 	for(let i in carnetList){
 		tableCarnet += "<tr><td>" + carnetList[i].libPays + "</td><td>" + carnetList[i].notes + "</td><td>";
 	}//construction du corps de la table
-
-	document.getElementById('carnet').innerHTML = "<tr><thead><strong>Votre carnet :</strong></thead></tr><tr><th>Pays</th><th>Notes</th><th></th></tr>"
+	document.getElementById('carnet').innerHTML = "<tr><thead><strong>Votre carnet :</strong></thead></tr><tr><th>Pays</th><th>Notes</th></tr>"
 	document.getElementById('carnet').innerHTML += tableCarnet;
+	
+	
+	//Construction de la table comprenant les drapeaux.
+	document.getElementById('flag').innerHTML = "";
+	tableDrapeau=['<tr>'];
+	for(let i in carnetList){
+		if(tableDrapeau.length  %6 == 0){
+			tableDrapeau.push('</tr><tr>');
+			tableDrapeau.push('<td><img src=IMG/flags/' + carnetList[i].drapeaux + ".jpg></td>")
+		}
+		else{
+			tableDrapeau.push('<td><img src=IMG/flags/' + carnetList[i].drapeaux + '.jpg></td>');
+		}
+	}
+	let affichageDrapeau="";
+	for(let i=0; i<tableDrapeau.length; i++){
+			affichageDrapeau+=tableDrapeau[i];
+	}
+	
+	document.getElementById('flag').innerHTML = affichageDrapeau+'</tr>';
 }
 
-//recuperer la liste des pays sur le serveur
+
+	//recupere la liste des pays sur le serveur pour en faire un select.
 function getPays(){
 	let xhr = new XMLHttpRequest(); // instancier XMLHttpRequest
 
@@ -178,8 +209,9 @@ function getPays(){
 	xhr.send(); // envoyer
 }
 
-function trierListe(attribut) {//permet de trier une liste donnée en format JSON selon un certain attribut
-    return function(a, b) {    //algorithme pour le sort qui se trouve dans le makeselect
+	//permet de trier une liste donnée en format JSON selon un certain attribut.
+function trierListe(attribut) {
+    return function(a, b) {//algorithme pour le sort qui se trouve dans le makeselect
         if (a[attribut] > b[attribut]) {    
             return 1;    
         } else if (a[attribut] < b[attribut]) {    
@@ -189,7 +221,8 @@ function trierListe(attribut) {//permet de trier une liste donnée en format JSO
     }    
 }   
 
-function faireSelect(){ // faire une liste déroulante alphabétiquement triée des produits
+	// faire une liste déroulante alphabétiquement triée des produits.
+function faireSelect(){
 	let liste;
 	paysList.sort(trierListe('libPays'));
 	for(let i in paysList){
@@ -199,10 +232,27 @@ function faireSelect(){ // faire une liste déroulante alphabétiquement triée 
 	document.getElementById("pays").innerHTML = liste;
 }
 
+	//Ajoute un pays dans le carnet associé au compte connecté.
 function ajouterPays(x){
 		let xhr = new XMLHttpRequest(); // instancier XMLHttpRequest
 		let url = 'ajouterPays?userId=' + userID + '&idPays=' + document.getElementById("pays").value + '&notes='+ document.getElementById("note").value  ;
 	xhr.open('get', url, true); 
-	xhr.onload = // callback : fonction anonyme	
+	xhr.onload = function(){
+		recupererCarnet();
+		}
 	xhr.send(); // envoyer
+}
+
+	//efface le carnet.
+function resetCarnet(){
+	//document.getElementById('carnet').innerHTML = "<tr><thead><strong>Votre carnet :</strong></thead></tr><tr><th>Pays</th><th>Notes</th></tr>"
+	let url = 'resetCarnet?userID=' + userID;//efface le carnet.
+	let xhr = new XMLHttpRequest();
+	xhr.open('get', url, true);
+	xhr.onload = function(){
+		recupererCarnet();//rafraichir la table carnet
+	}
+	xhr.send();
+	paysList = [];//vide le carnet coté client
+	displayErreure('ok');
 }
